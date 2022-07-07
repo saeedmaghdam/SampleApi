@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clean') {  
+            steps {
+                sh 'dotnet clean SampleApi.sln'
+            }
+        }
+
+        stage('Restore') {  
+            steps {
+                sh 'dotnet restore'
+            }
+        }
+
+        stage('Build') {  
+            steps {
+                sh 'dotnet build -c Release'
+            }
+        }
+
+        stage('Test') {  
+            steps {
+                sh 'dotnet test'
+            }
+        }
+
+        stage('Push') {
+            steps {
+                sh 'docker build -t saeedmaghdam/sample-api:$BUILD_NUMBER -f ./SampleApi/Dockerfile .'
+                sh 'docker push saeedmaghdam/sample-api:$BUILD_NUMBER'
+            }
+        }
+
+        stage('Trigger ManifestUpdate') {
+            steps {
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            }
+        }
+    }
+}
