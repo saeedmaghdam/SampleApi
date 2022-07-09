@@ -18,7 +18,7 @@ var app = builder.Build();
 
 app.MapGet("/", () =>
 {
-    return "Hello World! I'm new version!";
+    return "Hello World! I'm new version! Testing webhook.";
 })
 .WithName("Default GET API.");
 
