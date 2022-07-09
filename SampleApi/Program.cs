@@ -18,7 +18,7 @@ var app = builder.Build();
 
 app.MapGet("/", () =>
 {
-    return "Hello World!";
+    return "Hello World! I'm new version!";
 })
 .WithName("Default GET API.");
 
